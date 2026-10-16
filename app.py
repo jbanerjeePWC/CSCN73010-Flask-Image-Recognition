@@ -10,7 +10,6 @@ app = Flask(__name__)
 @app.route("/")
 def main():
     """Render the application's home page."""
-    unused_test_variable = 123
     return render_template("index.html")
 
 
@@ -29,7 +28,7 @@ def predict_image_file():
         img = preprocess_img(uploaded_file.stream)
         pred = predict_result(img)
         return render_template("result.html", predictions=str(pred))
-    except (OSError, ValueError, TypeError, KeyError):
+    except (OSError, ValueError, TypeError, KeyError, RuntimeError):
         return render_template(
             "result.html",
             err="File cannot be processed.",

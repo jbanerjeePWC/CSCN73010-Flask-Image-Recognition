@@ -65,3 +65,25 @@ def test_invalid_image_data_returns_error(client, monkeypatch):
 
     assert response.status_code == 200
     assert b"File cannot be processed." in response.data
+
+
+def test_prediction_runtime_error_returns_error(client, monkeypatch):
+    """A prediction runtime error should be handled gracefully."""
+
+    def fake_preprocess(_stream):
+        return "mock-preprocessed-image"
+
+    def fail_prediction(_image):
+        raise RuntimeError("simulated model runtime failure")
+
+    monkeypatch.setattr(flask_app, "preprocess_img", fake_preprocess)
+    monkeypatch.setattr(flask_app, "predict_result", fail_prediction)
+
+    response = client.post(
+        "/prediction",
+        data={"file": (BytesIO(b"test-image-data"), "test.png")},
+        content_type="multipart/form-data",
+    )
+
+    assert response.status_code == 200
+    assert b"File cannot be processed." in response.data
