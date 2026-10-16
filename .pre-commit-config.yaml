@@ -1,7 +1,19 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0  # Use the latest stable version
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
+        exclude: ^\.idea/
       - id: end-of-file-fixer
+        exclude: ^\.idea/
       - id: check-yaml
+        exclude: ^\.idea/
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: python -m pylint app.py model.py
+        language: system
+        pass_filenames: false
+        always_run: true
