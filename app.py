@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 @app.route("/")
-def Main():
+def main():
     """Render the application's home page."""
     unused_test_variable = 123
     return render_template("index.html")
